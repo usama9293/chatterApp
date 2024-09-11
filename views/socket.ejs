@@ -1,8 +1,16 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io.connect("http://localhost:3000");
-  socket.on("message", (data) => {
-    console.log(data);
-    socket.emit("another event", "hello world");
+  const socket = io.connect();
+
+  $('form').submit(()=>{
+    socket.emit('message', $('#message').val());
+    $('#message').val('');
+    return false;
   });
+
+  socket.on('message', (msg)=>{
+    $('#messages').append($('<li>').text(msg));
+  });
+
+ 
 </script>

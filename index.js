@@ -25,23 +25,18 @@ app.get("/", (req, res) => {
 
 // Socket.io Connection
 io.on("connection", (socket) => {
-  console.log("A user connected with ID: ", socket.id);
+  console.log("connected");
 
-  // Send a message when the user connects
-  socket.emit("message", "Welcome to the chat!");
-
-  // Listen for messages from the client
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg); // Broadcast message to all clients
+  socket.on("message", (msg) => {
+    console.log(msg);
+    io.emit("message", msg);
   });
 
-  // Handle disconnection
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
 });
 
-// Start the server
 const PORT = 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
