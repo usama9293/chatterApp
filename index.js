@@ -3,10 +3,25 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import path from "path";
 import { fileURLToPath } from "url";
+import ejsMate from "ejs-mate";
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+
+app.use(express.static("public"));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(path.resolve(), "public")));
+
+// Use method-override middleware
+
+// Set EJS as the view engine
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+
+app.set("views", path.join(path.resolve(), "views"));
 
 const PORT = 3000;
 
