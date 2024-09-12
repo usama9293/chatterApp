@@ -1,6 +1,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io.connect();
+  const socket = io.connect('/tech');
 
   $('form').submit(()=>{
     socket.emit('message', $('#message').val());
