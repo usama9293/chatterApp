@@ -28,11 +28,16 @@ const tech=io.of("/tech")
 
 // Socket.io Connection
 tech.on("connection", (socket) => {
-  console.log("connected");
+ 
+  socket.on('join', (data)=>{
 
-  socket.on("message", (msg) => {
-    console.log(msg);
-    tech.emit("message", msg);
+    socket.join(data.room);
+    tech.in(data.room).emit('message', `New user joined ${data.room} room!`);
+
+  })
+  socket.on("message", (data) => {
+    console.log(data.msg);
+    tech.in(data.room).emit("message", data.msg);
   });
 
   socket.on("disconnect", () => {

@@ -1,16 +1,21 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
+const room='javascript'
+
+
   const socket = io.connect('/tech');
 
   $('form').submit(()=>{
-    socket.emit('message', $('#message').val());
+    let msg=$('#message').val()
+    socket.emit('message',{msg,room} );
     $('#message').val('');
     return false;
   });
 
   socket.on('connect', ()=>{
     //emitting to everybody
-   socket.emit('message', 'user connected');
+   socket.emit('join', {room: room});
   });
 
   socket.on('message', (msg)=>{
