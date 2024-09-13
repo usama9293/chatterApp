@@ -1,0 +1,49 @@
+<% layout("/layout/boilerplate") %>
+
+<!-- Jumbotron Section -->
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+  <div class="container-fluid py-5 text-center">
+    <h1 class="display-5 fw-bold">Python Room</h1>
+    <p class="col-md-8 mx-auto fs-4">
+      Welcome to the Python chat room. Discuss Python-related topics, questions, and projects here!
+    </p>
+  </div>
+</div>
+
+<!-- Chat Messages Section -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <ul id="messages" class="list-group mb-4"></ul>
+      <form id="chatForm">
+        <input id="message" autocomplete="off" class="form-control mb-2" placeholder="Type a message..." />
+        <button class="btn btn-primary" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io.connect("/tech");
+  const room = "python"; // Set room to "python"
+
+  socket.emit('join', { room });
+
+  document.getElementById('chatForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let msg = document.getElementById('message').value;
+    if (msg) {
+      socket.emit('message', { msg, room });
+      document.getElementById('message').value = '';
+    }
+  });
+
+  socket.on('message', (msg) => {
+    const messageList = document.getElementById('messages');
+    const newMessage = document.createElement('li');
+    newMessage.textContent = msg;
+    newMessage.className = 'list-group-item';
+    messageList.appendChild(newMessage);
+  });
+</script>
